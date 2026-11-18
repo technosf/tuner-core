@@ -1,0 +1,3 @@
+# Core boundary baseline - uses of toolkit, widgets and the Application class in non-presentation code.
+# Written by scripts/check_core_boundary.py --update. The numbers may only go down.
+# file<TAB>category<TAB>count
