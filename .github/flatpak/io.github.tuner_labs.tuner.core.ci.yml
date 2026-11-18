@@ -1,0 +1,41 @@
+# Copyright © 2026 <https://github.com/technosf>
+# SPDX-FileCopyrightText: © 2026 <https://github.com/technosf>
+#
+# SPDX-License-Identifier: GPL-3.0-or-later
+#
+# CI manifest for tuner-core: builds and tests the core in the freedesktop 26.08 SDK, the platform the app ships on.
+# It is not a runnable app; only the module build and its tests matter. Used by .github/workflows/ci.yml.
+---
+app-id: io.github.tuner_labs.tuner.core.ci
+runtime: org.freedesktop.Platform
+runtime-version: '26.08'
+sdk: org.freedesktop.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.vala
+command: true
+
+build-options:
+  prepend-path: /usr/lib/sdk/vala/bin/
+  prepend-ld-library-path: /usr/lib/sdk/vala/lib
+
+modules:
+  - name: libgee
+    buildsystem: autotools
+    build-options:
+      cflags: -Wno-error=incompatible-pointer-types
+    sources:
+      - type: archive
+        url: https://download.gnome.org/sources/libgee/0.20/libgee-0.20.8.tar.xz
+        sha256: 189815ac143d89867193b0c52b7dc31f3aa108a15f04d6b5dca2b6adfad0b0ee
+
+  - name: tuner-core
+    buildsystem: meson
+    run-tests: true
+    config-opts:
+      - --buildtype=debug
+    sources:
+      - type: dir
+        path: ../..
+        skip:
+          - .git
+          - build
